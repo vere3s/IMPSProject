@@ -55,7 +55,7 @@ router.post('/actualizar/:idcarrera', async(request, response) => {
     response.redirect('/carreras');
 });
 
-// Endpoint que perite eliminar una carrera
+// Endpoint que permite eliminar una carrera
 router.get('/eliminar/:idcarrera', async(request, response) => {
     const { idcarrera } = request.params;  // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idcarrera
     const resultado = await queries.eliminarCarrera(idcarrera);
