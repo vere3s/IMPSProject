@@ -2,10 +2,10 @@
     <div class="col-sm-12">
         <div class="row">
             <div class="col-sm-6">
-                <h3>Listado carreras</h3>
+                <h3>Listado materias</h3>
             </div>
             <div class="col-sm-6">
-                <a href="/carreras/agregar" class="btn btn-success d-block text-white">Agregar carreras</a>
+                <a href="/materias/agregar" class="btn btn-success d-block text-white">Agregar materias</a>
             </div>
         </div>
     </div>
@@ -14,18 +14,18 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Carrera</th>
+                <th scope="col">Materia</th>
                 <th scope="col">Opciones</th>
             </tr>
         </thead>
         <tbody>
-            {{#each carreras}}
+            {{#each materias}}
             <tr>
-                <th scope="row">{{idcarrera}}</th>
-                <td>{{carrera}}</td>
+                <th scope="row">{{idmateria}}</th>
+                <td>{{materia}}</td>
                 <td>
-                    <a href="/carreras/actualizar/{{idcarrera}}" class="btn btn-primary text-white">Modificar</a>
-                    <a href="/carreras/eliminar/{{idcarrera}}" class="btn btn-danger text-white">Eliminar</a>
+                    <a href="/materias/actualizar/{{idmateria}}" class="btn btn-primary text-white">Modificar</a>
+                    <a href="/materias/eliminar/{{idmateria}}" class="btn btn-danger text-white">Eliminar</a>
                 </td>
             </tr>
             {{/each}}

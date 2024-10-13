@@ -67,7 +67,7 @@ router.post('/actualizar/:idestudiante', async(request, response) => {
     response.redirect('/estudiantes');
 });
 
-// Endpoint que perite eliminar un estudiante
+// Endpoint que permite eliminar un estudiante
 router.get('/eliminar/:idestudiante', async(request, response) => {
     const { idestudiante } = request.params; // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idestudiante
     const resultado = await queries.eliminarEstudiante(idestudiante);
