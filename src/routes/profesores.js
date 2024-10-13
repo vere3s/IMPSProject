@@ -9,6 +9,11 @@ router.get('/', async (request, response) => {
     response.render('profesores/listado', {profesores}); // Mostramos el listado de profesores
 });
 
+// Endpoint que permite mostrar el formulario para agregar un nuevo profesor
+router.get('/agregar', async(request, response) => {
+    response.render('profesores/agregar');
+});
+
 // Endpoint para agregar un profesor
 router.post('/agregar', async(request, response) => {
     // Obtén los datos del profesor desde el formulario
@@ -54,7 +59,7 @@ router.post('/actualizar/:idprofesor', async(request, response) => {
     const { profesion } = request.body;
     const { genero } = request.body;
     const { email } = request.body;
-    const resultado = await queries.actualizarProfesor(idestudiante, nombre, apellido, fecha_nacimiento, profesion, genero, email);
+    const resultado = await queries.actualizarProfesor(idprofesor, nombre, apellido, fecha_nacimiento, profesion, genero, email);
     if(resultado > 0){
         console.log('Actualizado con exito');
     }

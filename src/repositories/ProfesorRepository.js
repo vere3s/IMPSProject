@@ -5,7 +5,7 @@ module.exports = {
     // Consulta para obtener todos los profesores
     obtenerTodosLosProfesores: async() => {
         try {
-            const result = await pool.query('SELECT * FROM profesores');
+            const result = await pool.query('SELECT idprofesor, nombre, apellido, DATE_FORMAT(fecha_nacimiento, "%Y-%m-%d") AS fecha_nacimiento, profesion, genero, email FROM profesores');
             return result;
         } catch (error) {
             console.error('Ocurrio un problema al consultar la lista de profesores: ', error);
@@ -25,7 +25,7 @@ module.exports = {
     // Agregar un nuevo profesor
     agregarProfesor: async(nombre, apellido, fecha_nacimiento, profesion, genero, email) => {
         try {
-            const result = await pool.query('INSERT INTO profesores VALUES (?, ?, ?, ?, ?, ?)', [nombre, apellido, fecha_nacimiento, profesion, genero, email]);
+            const result = await pool.query('INSERT INTO profesores (nombre, apellido, fecha_nacimiento, profesion, genero, email) VALUES (?, ?, ?, ?, ?, ?)', [nombre, apellido, fecha_nacimiento, profesion, genero, email]);
             return result; // Retorna el ID del profesor insertado
         } catch (error) {
             console.error('Ocurrió un problema al agregar el profesor: ', error);
@@ -33,9 +33,9 @@ module.exports = {
     },
 
     // Actualizar un profesor
-    actualizarProfesor: async(idestudiante, nombre, apellido, fecha_nacimiento, profesion, genero, email) => {
+    actualizarProfesor: async(idprofesor, nombre, apellido, fecha_nacimiento, profesion, genero, email) => {
         try {
-            const result = await pool.query('UPDATE profesores SET nombre = ?, apellido = ?, fecha_nacimiento = ?, profesion = ?, genero = ?, email = ? WHERE idprofesor = ?', [nombre, apellido, fecha_nacimiento, profesion, genero, email, idestudiante]);
+            const result = await pool.query('UPDATE profesores SET nombre = ?, apellido = ?, fecha_nacimiento = ?, profesion = ?, genero = ?, email = ? WHERE idprofesor = ?', [nombre, apellido, fecha_nacimiento, profesion, genero, email, idprofesor]);
             return result;
         } catch (error) {
             console.error('Ocurrio un problema al actualizar el profesor: ', error);
