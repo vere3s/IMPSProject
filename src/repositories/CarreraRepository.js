@@ -37,7 +37,7 @@ module.exports = {
     actualizarCarrera: async(idcarrera, carrera) => {
         try {
             const result = await pool.query('UPDATE carreras SET carrera = ? WHERE idcarrera = ?', [carrera, idcarrera]);
-            return result;
+            return result.affectedRows;
         } catch (error) {
             console.error('Ocurrio un problema al actualizar la carrera: ', error);
         }
@@ -47,7 +47,7 @@ module.exports = {
     eliminarCarrera: async(idcarrera) => {
         try {
             const result = await pool.query('DELETE FROM carreras WHERE idcarrera = ?', [idcarrera]);
-            return result.affectedRows > 0;
+            return result.affectedRows;
         } catch (error) {
             console.error('Error al eliminar el registro', error);
         }

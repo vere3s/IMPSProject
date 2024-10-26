@@ -28,12 +28,12 @@ router.post('/agregar', async(request, response) => {
     if (nombre && apellido && email && idcarrera && usuario ) {
         const resultado = await queries.agregarEstudiante(nombre, apellido, email, idcarrera, usuario);
         if (resultado) {
-            console.log('Estudiante agregado con éxito');
+            request.flash('success', 'Registro insertado con exito');
         } else {
-            console.log('Error al agregar el estudiante');
+            request.flash('error', 'Ocurrio un problema al guardar el registro');
         }
     } else {
-        console.log('Todos los apartados son requeridos');
+        request.flash('error', 'Todos los campos del estudiante son requeridos');
     }
 
     response.redirect('/estudiantes');
@@ -62,7 +62,9 @@ router.post('/actualizar/:idestudiante', async(request, response) => {
     const { usuario } = request.body;
     const resultado = await queries.actualizarEstudiante(idestudiante, nombre, apellido, email, idcarrera, usuario);
     if(resultado > 0){
-        console.log('Actualizado con exito');
+        request.flash('success', 'Registro actualizado con exito');
+    } else {
+        request.flash('error', 'Ocurrio un problema al actualizar el registro');
     }
     response.redirect('/estudiantes');
 });
@@ -72,7 +74,9 @@ router.get('/eliminar/:idestudiante', async(request, response) => {
     const { idestudiante } = request.params; // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idestudiante
     const resultado = await queries.eliminarEstudiante(idestudiante);
     if(resultado > 0){
-        console.log('Eliminado con éxito');
+        request.flash('success', 'Eliminación correcta');
+    }  else {
+        request.flash('error', 'Error al eliminar');
     }
     response.redirect('/estudiantes');
 });

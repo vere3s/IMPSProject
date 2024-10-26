@@ -27,12 +27,12 @@ router.post('/agregar', async(request, response) => {
     if (nombre && apellido && fecha_nacimiento && profesion && genero && email ) {
         const resultado = await queries.agregarProfesor(nombre, apellido, fecha_nacimiento, profesion, genero, email);
         if (resultado) {
-            console.log('Profesor agregado con éxito');
+            request.flash('success', 'Registro insertado con exito');
         } else {
-            console.log('Error al agregar el profesor');
+            request.flash('error', 'Ocurrio un problema al guardar el registro');
         }
     } else {
-        console.log('Todos los apartados son requeridos');
+        request.flash('error', 'Todos los campos del profesor son requeridos');
     }
 
     response.redirect('/profesores');
@@ -60,8 +60,14 @@ router.post('/actualizar/:idprofesor', async(request, response) => {
     const { genero } = request.body;
     const { email } = request.body;
     const resultado = await queries.actualizarProfesor(idprofesor, nombre, apellido, fecha_nacimiento, profesion, genero, email);
-    if(resultado > 0){
-        console.log('Actualizado con exito');
+    if (nombre && apellido && fecha_nacimiento && profesion && genero && email ) {    
+        if(resultado > 0){
+            request.flash('success', 'Registro actualizado con exito');
+        } else {
+            request.flash('error', 'Ocurrio un problema al actualizar el registro');
+        }
+    } else {
+        request.flash('error', 'Todos los campos del profesor son requeridos');
     }
     response.redirect('/profesores');
 });
@@ -71,7 +77,9 @@ router.get('/eliminar/:idprofesor', async(request, response) => {
     const { idprofesor } = request.params; // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idprofesor
     const resultado = await queries.eliminarProfesor(idprofesor);
     if(resultado > 0){
-        console.log('Eliminado con éxito');
+        request.flash('success', 'Eliminación correcta');
+    }  else {
+        request.flash('error', 'Error al eliminar');
     }
     response.redirect('/profesores');
 });

@@ -36,7 +36,7 @@ module.exports = {
     actualizarProfesor: async(idprofesor, nombre, apellido, fecha_nacimiento, profesion, genero, email) => {
         try {
             const result = await pool.query('UPDATE profesores SET nombre = ?, apellido = ?, fecha_nacimiento = ?, profesion = ?, genero = ?, email = ? WHERE idprofesor = ?', [nombre, apellido, fecha_nacimiento, profesion, genero, email, idprofesor]);
-            return result;
+            return result.affectedRows;
         } catch (error) {
             console.error('Ocurrio un problema al actualizar el profesor: ', error);
         }
@@ -46,7 +46,7 @@ module.exports = {
     eliminarProfesor: async(idprofesor) => {
         try {
             const result = await pool.query('DELETE FROM profesores WHERE idprofesor = ?', [idprofesor]);
-            return result.affectedRows > 0;
+            return result.affectedRows;
         } catch (error) {
             console.error('Error al eliminar el registro', error);
         }

@@ -1,0 +1,54 @@
+<div class="container p-4">
+    <div class="row justify-content-center">
+        <h1 class="text-center mb-4">Asignar grupo</h1>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Agregar Estudiante</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <select class="form-control" id="estudiante">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            {{#each lstEstudiantes}}
+                            <option value="{{idestudiante}}">{{nombre}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div hidden>
+                        <input type="hidden" id="idgrupo" value="{{idgrupo}}" />
+                    </div>
+                    <button onclick="agregarEstudiante()" class="btn btn-success btn-block">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Estudiantes Asignados</h5>
+                </div>
+                <div class="card-body">
+                    <div id="mensajeExito" class="alert alert-success" style="display: none;">Estudiante agregado exitosamente.</div>
+                    <div id="mensajeError" class="alert alert-danger" style="display: none;">Ocurrió un error al agregar el estudiante.</div>
+                    <form action="/grupos/asignargrupo" method="POST" class="form-ajax">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Estudiante</th>
+                                    <th scope="col">Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contenido_tabla"></tbody>
+                        </table>
+                        <div id="data" hidden></div>
+                        <button class="btn btn-primary btn-block" id="enviarDatos">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

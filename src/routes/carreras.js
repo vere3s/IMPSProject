@@ -21,12 +21,12 @@ router.post('/agregar', async(request, response) => {
     if (carrera) {
         const resultado = await queries.agregarCarrera(carrera);
         if (resultado) {
-            console.log('Carrera agregada con éxito');
+            request.flash('success', 'Registro insertado con exito');
         } else {
-            console.log('Error al agregar la carrera');
+            request.flash('error', 'Ocurrio un problema al guardar el registro');
         }
     } else {
-        console.log('El nombre de la carrera es requerido');
+        request.flash('error', 'El nombre de la carrera es requerido');
     }
 
     response.redirect('/carreras');
@@ -50,8 +50,11 @@ router.post('/actualizar/:idcarrera', async(request, response) => {
     const { carrera } = request.body;
     const resultado = await queries.actualizarCarrera(idcarrera, carrera);
     if(resultado > 0){
-        console.log('Actualizado con exito');
+        request.flash('success', 'Registro actualizado con exito');
+    } else {
+        request.flash('error', 'Ocurrio un problema al actualizar el registro');
     }
+    
     response.redirect('/carreras');
 });
 
@@ -60,7 +63,9 @@ router.get('/eliminar/:idcarrera', async(request, response) => {
     const { idcarrera } = request.params;  // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idcarrera
     const resultado = await queries.eliminarCarrera(idcarrera);
     if(resultado > 0){
-        console.log('Eliminado con éxito');
+        request.flash('success', 'Eliminación correcta');
+    }  else {
+        request.flash('error', 'Error al eliminar');
     }
     response.redirect('/carreras');
 });
