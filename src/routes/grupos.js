@@ -4,23 +4,24 @@ const queries = require('../repositories/GrupoRepository');
 const estudiantesQuery = require('../repositories/EstudianteRepository');
 const materiasQuery = require('../repositories/MateriaRepository');
 const profesoresQuery = require('../repositories/ProfesorRepository');
+const { isLoggedIn } = require('../lib/auth');
 
 // Endpoint para mostrar todos los grupos
-router.get('/', async (request, response) => {
+router.get('/', isLoggedIn, async (request, response) => {
     const grupos = await queries.obtenerTodosLosGrupos();
 
     response.render('grupos/listado', {grupos}); // Mostramos el listado de grupos
 });
 
 // Endpoint que permite mostrar el formulario para agregar un nuevo grupo
-router.get('/agregar', async(request, response) => {
+router.get('/agregar', isLoggedIn, async(request, response) => {
     const materias = await materiasQuery.obtenerTodasLasMaterias(); // Obtener la lista de materias
     const profesores = await profesoresQuery.obtenerTodosLosProfesores(); // Obtener la lista de profesores
     response.render('grupos/agregar', { materias, profesores }); // Renderizamos el formulario con materias y profesores
 });
 
 // Endpoint para agregar un grupo
-router.post('/agregar', async(request, response) => {
+router.post('/agregar', isLoggedIn, async(request, response) => {
     // Obtén los datos del grupo desde el formulario
     const { num_grupo } = request.body; 
     const { anio } = request.body;
@@ -43,7 +44,7 @@ router.post('/agregar', async(request, response) => {
 });
 
 // Endpoint que permite mostrar el formulario para actualizar un nuevo grupo
-router.get('/actualizar/:idgrupo', async(request, response) => {
+router.get('/actualizar/:idgrupo', isLoggedIn, async(request, response) => {
     const { idgrupo } = request.params;
     const grupo = await queries.obtenerGrupoPorId(idgrupo); 
     const materias = await materiasQuery.obtenerTodasLasMaterias(); 
@@ -57,7 +58,7 @@ router.get('/actualizar/:idgrupo', async(request, response) => {
 });
 
 // Endpoint para actualizar un grupo
-router.post('/actualizar/:idgrupo', async(request, response) => {
+router.post('/actualizar/:idgrupo', isLoggedIn, async(request, response) => {
     const { idgrupo } = request.params;
     const { num_grupo } = request.body;
     const { anio } = request.body;
@@ -74,7 +75,7 @@ router.post('/actualizar/:idgrupo', async(request, response) => {
 });
 
 // Endpoint que permite eliminar un grupo
-router.get('/eliminar/:idgrupo', async(request, response) => {
+router.get('/eliminar/:idgrupo', isLoggedIn, async(request, response) => {
     const { idgrupo } = request.params; // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idgrupo
     const resultado = await queries.eliminarGrupo(idgrupo);
     if(resultado > 0){
@@ -88,7 +89,7 @@ router.get('/eliminar/:idgrupo', async(request, response) => {
 
 
 // Enpoint que permite navegar a la pantalla para asignar un grupo
-router.get('/asignargrupo/:idgrupo', async (request, response) => {
+router.get('/asignargrupo/:idgrupo', isLoggedIn, async (request, response) => {
     const { idgrupo } = request.params;
     // Consultamos el listado de estudiantes disponible
     const lstEstudiantes = await estudiantesQuery.obtenerTodosLosEstudiantes();
@@ -97,7 +98,7 @@ router.get('/asignargrupo/:idgrupo', async (request, response) => {
 });
 
 // Endpoint que permite asignar un grupo
-router.post('/asignargrupo', async (request, response) => {
+router.post('/asignargrupo', isLoggedIn, async (request, response) => {
 
     const data = request.body;
 

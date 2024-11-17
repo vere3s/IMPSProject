@@ -7,12 +7,15 @@ const flash = require('connect-flash'); // Nos permite manejar mensajes en la se
 const session = require('express-session'); // Permite manejar sesiones, por ejemplo, para almacenar datos en la
 // memoria del servidor, tambien se puede almacenar en la base de datos.
 const MySQLStore = require('express-mysql-session')(session);
+const passport = require('passport'); // necesario para autenticacion del usuario
 // Inicializaciones
 const app = express();
 
 require('dotenv').config()
 
 const { database } = require('./config/keys');
+
+require('./lib/passportConfig'); // permite que passport se entere de la autenticacion que estoy creando
 
 // Ajustes del servidor
 app.set('port', process.env.PORT || 4500);
@@ -37,22 +40,29 @@ app.use(session({
 app.use(flash());
 app.use(morgan('dev')); // Configurando el middleware morgan para visualizar que esta llegando al servidor
 app.use(express.urlencoded({extended: false})); // Sirve para poder aceptar datos desde formularios
+app.use(passport.initialize()); // Para iniciar passport
+app.use(passport.session()); // aca se le indica donde se deben guardar los datos
 
 // ==== VARIABLES GLOBALES =====
 app.use((request, response, next) => {
     // Haciendo global el uso de flash
     app.locals.success = request.flash('success');
     app.locals.error = request.flash('error');
+
+    app.locals.user = request.user; // manejo global del usuario
+    
     next(); // permite continuar con la ejecucion del código
 });
 
 // Configuracion de rutas
 app.use(require('./routes')); // Node automaticamente busca el index.js del modulo
+app.use(require('./routes/authentication'));
 app.use('/estudiantes',require('./routes/estudiantes')); // Configuracion de ruta para estudiantes
 app.use('/carreras', require('./routes/carreras')); // Configuracion de ruta para carreras
 app.use('/profesores', require('./routes/profesores')); // Configuracion de ruta para profesores
 app.use('/materias', require('./routes/materias')); // Configuracion de ruta para materias
 app.use('/grupos', require('./routes/grupos')); // Configuracion de ruta para grupos
+
 // Archivos publicos (aca se coloca todo el código al cual el navegador puede acceder)
 app.use(express.static(path.join(__dirname, 'public')));
 

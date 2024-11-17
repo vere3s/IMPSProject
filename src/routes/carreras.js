@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../repositories/CarreraRepository');
+const { isLoggedIn } = require('../lib/auth');
 
 // Endpoint para mostrar todos las carreras
-router.get('/', async (request, response) => {
+router.get('/', isLoggedIn, async (request, response) => {
     const carreras = await queries.obtenerTodasLasCarreras();
 
     response.render('carreras/listado', {carreras}); // Mostramos el listado de carreras
 });
 
 // Endpoint que permite mostrar el formulario para agregar una nueva carrera
-router.get('/agregar', async(request, response) => {
+router.get('/agregar', isLoggedIn, async(request, response) => {
     response.render('carreras/agregar'); // Renderizamos el formulario
 });
 
 // Endpoint para agregar una carrera
-router.post('/agregar', async(request, response) => {
+router.post('/agregar', isLoggedIn, async(request, response) => {
     const { carrera } = request.body; // Obtén el nombre de la carrera desde el formulario
 
     if (carrera) {
@@ -33,7 +34,7 @@ router.post('/agregar', async(request, response) => {
 });
 
 // Endpoint que permite mostrar el formulario para actualizar una nueva carrera
-router.get('/actualizar/:idcarrera', async(request, response) => {
+router.get('/actualizar/:idcarrera', isLoggedIn, async(request, response) => {
     const { idcarrera } = request.params;
     const carrera = await queries.obtenerCarreraPorId(idcarrera);
 
@@ -45,7 +46,7 @@ router.get('/actualizar/:idcarrera', async(request, response) => {
 });
 
 // Endpoint para actualizar una carrera
-router.post('/actualizar/:idcarrera', async(request, response) => {
+router.post('/actualizar/:idcarrera', isLoggedIn, async(request, response) => {
     const { idcarrera } = request.params;
     const { carrera } = request.body;
     const resultado = await queries.actualizarCarrera(idcarrera, carrera);
@@ -59,7 +60,7 @@ router.post('/actualizar/:idcarrera', async(request, response) => {
 });
 
 // Endpoint que permite eliminar una carrera
-router.get('/eliminar/:idcarrera', async(request, response) => {
+router.get('/eliminar/:idcarrera', isLoggedIn, async(request, response) => {
     const { idcarrera } = request.params;  // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idcarrera
     const resultado = await queries.eliminarCarrera(idcarrera);
     if(resultado > 0){

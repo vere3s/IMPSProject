@@ -2,15 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const estudianteRepository = require('../repositories/EstudianteRepository');
-
+const { isLoggedIn } = require('../lib/auth');
 
 // Configuracion de ruta inicial de la aplicacion
-router.get('/', async (request,response) => {
-    //Probando conexion con la base de datos.
-    const lstEstudiantes = await estudianteRepository.obtenerTodosLosEstudiantes();
-    console.log('Listado: ', lstEstudiantes);
-
-    response.send('Bienvenido al laboratorio de IMPS');
+router.get('/', isLoggedIn, async (request,response) => {
+    response.render('home/home');
 });
 
 module.exports = router;

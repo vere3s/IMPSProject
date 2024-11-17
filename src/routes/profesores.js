@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../repositories/ProfesorRepository');
+const { isLoggedIn } = require('../lib/auth');
 
 // Endpoint para mostrar todos los profesores
-router.get('/', async (request, response) => {
+router.get('/', isLoggedIn, async (request, response) => {
     const profesores = await queries.obtenerTodosLosProfesores();
 
     response.render('profesores/listado', {profesores}); // Mostramos el listado de profesores
 });
 
 // Endpoint que permite mostrar el formulario para agregar un nuevo profesor
-router.get('/agregar', async(request, response) => {
+router.get('/agregar', isLoggedIn, async(request, response) => {
     response.render('profesores/agregar');
 });
 
 // Endpoint para agregar un profesor
-router.post('/agregar', async(request, response) => {
+router.post('/agregar', isLoggedIn, async(request, response) => {
     // Obtén los datos del profesor desde el formulario
     const { nombre } = request.body; 
     const { apellido } = request.body;
@@ -39,7 +40,7 @@ router.post('/agregar', async(request, response) => {
 });
 
 // Endpoint que permite mostrar el formulario para actualizar un nuevo profesor
-router.get('/actualizar/:idprofesor', async(request, response) => {
+router.get('/actualizar/:idprofesor', isLoggedIn, async(request, response) => {
     const { idprofesor } = request.params;
     const profesor = await queries.obtenerProfesorPorId(idprofesor); 
 
@@ -51,7 +52,7 @@ router.get('/actualizar/:idprofesor', async(request, response) => {
 });
 
 // Endpoint para actualizar un profesor
-router.post('/actualizar/:idprofesor', async(request, response) => {
+router.post('/actualizar/:idprofesor', isLoggedIn, async(request, response) => {
     const { idprofesor } = request.params;
     const { nombre } = request.body;
     const { apellido } = request.body;
@@ -73,7 +74,7 @@ router.post('/actualizar/:idprofesor', async(request, response) => {
 });
 
 // Endpoint que permite eliminar un profesor
-router.get('/eliminar/:idprofesor', async(request, response) => {
+router.get('/eliminar/:idprofesor', isLoggedIn, async(request, response) => {
     const { idprofesor } = request.params; // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idprofesor
     const resultado = await queries.eliminarProfesor(idprofesor);
     if(resultado > 0){

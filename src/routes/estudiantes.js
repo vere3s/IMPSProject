@@ -2,22 +2,23 @@ const express = require('express');
 const router = express.Router();
 const queries = require('../repositories/EstudianteRepository');
 const queriesC = require('../repositories/CarreraRepository');
+const { isLoggedIn } = require('../lib/auth');
 
 // Endpoint para mostrar todos los estudiantes
-router.get('/', async (request, response) => {
+router.get('/', isLoggedIn, async (request, response) => {
     const estudiantes = await queries.obtenerTodosLosEstudiantes();
 
     response.render('estudiantes/listado', {estudiantes}); // Mostramos el listado de estudiantes
 });
 
 // Endpoint que permite mostrar el formulario para agregar un nuevo estudiante
-router.get('/agregar', async(request, response) => {
+router.get('/agregar', isLoggedIn, async(request, response) => {
     const carreras = await queriesC.obtenerTodasLasCarreras(); // Obtener la lista de carreras
     response.render('estudiantes/agregar', { carreras }); // Renderizamos el formulario con las carreras
 });
 
 // Endpoint para agregar un estudiante
-router.post('/agregar', async(request, response) => {
+router.post('/agregar', isLoggedIn, async(request, response) => {
     // Obtén los datos del estudiante desde el formulario
     const { nombre } = request.body; 
     const { apellido } = request.body;
@@ -40,7 +41,7 @@ router.post('/agregar', async(request, response) => {
 });
 
 // Endpoint que permite mostrar el formulario para actualizar un nuevo estudiante
-router.get('/actualizar/:idestudiante', async(request, response) => {
+router.get('/actualizar/:idestudiante', isLoggedIn, async(request, response) => {
     const { idestudiante } = request.params;
     const estudiante = await queries.obtenerEstudiantePorId(idestudiante); 
     const carreras = await queriesC.obtenerTodasLasCarreras();
@@ -53,7 +54,7 @@ router.get('/actualizar/:idestudiante', async(request, response) => {
 });
 
 // Endpoint para actualizar un estudiante
-router.post('/actualizar/:idestudiante', async(request, response) => {
+router.post('/actualizar/:idestudiante', isLoggedIn, async(request, response) => {
     const { idestudiante } = request.params;
     const { nombre } = request.body;
     const { apellido } = request.body;
@@ -70,7 +71,7 @@ router.post('/actualizar/:idestudiante', async(request, response) => {
 });
 
 // Endpoint que permite eliminar un estudiante
-router.get('/eliminar/:idestudiante', async(request, response) => {
+router.get('/eliminar/:idestudiante', isLoggedIn, async(request, response) => {
     const { idestudiante } = request.params; // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idestudiante
     const resultado = await queries.eliminarEstudiante(idestudiante);
     if(resultado > 0){
